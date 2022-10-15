@@ -2,6 +2,8 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline'
 import {ConnectButton} from "@rainbow-me/rainbowkit";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', current: false },
@@ -13,6 +15,8 @@ function classNames(...classes: any[]) {
 }
 
 export function NavigationBar() {
+  const { pathname } = useRouter();
+
   return (
       <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => (
@@ -32,10 +36,12 @@ export function NavigationBar() {
                   </div>
                   <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div className="flex flex-shrink-0 items-center">
-                      <a href='/'>
-                      <ArrowsPointingOutIcon className="block h-8 w-auto lg:hidden text-white" />
-                      <ArrowsPointingOutIcon className="block h-8 w-auto lg:block text-white" />
-                      </a>
+                      <Link href='/'>
+                        <ArrowsPointingOutIcon className="cursor-pointer block h-8 w-auto lg:hidden text-white" />
+                      </Link>
+                      <Link href='/'>
+                        <ArrowsPointingOutIcon className="cursor-pointer block h-8 w-auto lg:block text-white" />
+                      </Link>
                     </div>
                     <div className="hidden sm:ml-6 sm:block">
                       <div className="flex space-x-4">
@@ -44,10 +50,10 @@ export function NavigationBar() {
                                 key={item.name}
                                 href={item.href}
                                 className={classNames(
-                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                    (pathname === item.href) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                     'px-3 py-2 rounded-md text-sm font-medium'
                                 )}
-                                aria-current={item.current ? 'page' : undefined}
+                                aria-current={(pathname === item.href) ? 'page' : undefined}
                             >
                               {item.name}
                             </a>
