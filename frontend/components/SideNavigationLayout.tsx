@@ -36,7 +36,7 @@ export const SideNavigationLayout = ({ children }: any) => {
   const { pathname } = useRouter();
 
   return (
-    <div className="flex flex-row">
+    <aside className="fixed flex flex-row h-screen">
       {/* Static sidebar for desktop */}
       <div className="hidden md:inset-y-0 md:flex md:w-64 md:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
@@ -72,7 +72,7 @@ export const SideNavigationLayout = ({ children }: any) => {
       </div>
 
       <main className="flex-1">{children}</main>
-    </div>
+    </aside>
   );
 };
 
