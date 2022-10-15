@@ -8,25 +8,23 @@ import {
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment, useState } from "react";
+import { useRouter } from "next/router";
 
 const navigation = [
   {
     name: "Proposals",
     href: "/dashboard",
     icon: HomeIcon,
-    current: true,
   },
   {
     name: "History",
     href: "/dashboard/history",
     icon: UsersIcon,
-    current: false,
   },
   {
     name: "Leaderboard",
     href: "/dashboard/leaderboard",
     icon: FolderIcon,
-    current: false,
   },
 ];
 
@@ -35,6 +33,8 @@ function classNames(...classes: any[]) {
 }
 
 export const SideNavigationLayout = ({ children }: any) => {
+  const { pathname } = useRouter();
+
   return (
     <div className="flex flex-row">
       {/* Static sidebar for desktop */}
@@ -48,7 +48,7 @@ export const SideNavigationLayout = ({ children }: any) => {
                   key={item.name}
                   href={item.href}
                   className={classNames(
-                    item.current
+                    pathname === item.href
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",
                     "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
@@ -56,7 +56,7 @@ export const SideNavigationLayout = ({ children }: any) => {
                 >
                   <item.icon
                     className={classNames(
-                      item.current
+                      pathname === item.href
                         ? "text-gray-300"
                         : "text-gray-400 group-hover:text-gray-300",
                       "mr-3 flex-shrink-0 h-6 w-6"
