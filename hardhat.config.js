@@ -9,8 +9,11 @@ require("./tasks/faucet");
 module.exports = {
   solidity: "0.8.9",
   networks: {
+    localhost: {
+      url: "http://127.0.0.1:8545",
+    },
     hardhat: {
-      chainId: 1337 // We set 1337 to make interacting with MetaMask simpler
-    }
-  }
+      chainId: 1337, // We set 1337 to make interacting with MetaMask simpler
+    },
+  },
 };

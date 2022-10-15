@@ -22,8 +22,8 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
+  const ArbitrumToken = await ethers.getContractFactory("ArbitrumToken");
+  const token = await ArbitrumToken.deploy("10000000000000000000000");
   await token.deployed();
 
   console.log("Token address:", token.address);
@@ -34,7 +34,13 @@ async function main() {
 
 function saveFrontendFiles(token) {
   const fs = require("fs");
-  const contractsDir = path.join(__dirname, "..", "frontend", "src", "contracts");
+  const contractsDir = path.join(
+    __dirname,
+    "..",
+    "frontend",
+    "utils",
+    "contracts"
+  );
 
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);
@@ -42,14 +48,14 @@ function saveFrontendFiles(token) {
 
   fs.writeFileSync(
     path.join(contractsDir, "contract-address.json"),
-    JSON.stringify({ Token: token.address }, undefined, 2)
+    JSON.stringify({ ArbitrumToken: token.address }, undefined, 2)
   );
 
-  const TokenArtifact = artifacts.readArtifactSync("Token");
+  const ArbitrumTokenArtifact = artifacts.readArtifactSync("ArbitrumToken");
 
   fs.writeFileSync(
-    path.join(contractsDir, "Token.json"),
-    JSON.stringify(TokenArtifact, null, 2)
+    path.join(contractsDir, "ArbitrumToken.json"),
+    JSON.stringify(ArbitrumTokenArtifact, null, 2)
   );
 }
 
