@@ -70,7 +70,7 @@ export const SideNavigationLayout = ({ children }: any) => {
         </div>
       </div>
 
-      <main className="flex-1">{children}</main>
+      <main className="flex">{children}</main>
     </aside>
   );
 };
