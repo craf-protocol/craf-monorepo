@@ -9,6 +9,7 @@ import {
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { NavigationBar } from "../components/NavigationBar";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -58,6 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider appInfo={demoAppInfo} chains={chains}>
+        <NavigationBar />
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
