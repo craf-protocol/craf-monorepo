@@ -1,5 +1,11 @@
+import { SideNavigationLayout } from "../../components/SideNavigationLayout";
+
 const Leaderboard = () => {
-  return <div>Leaderboard</div>;
+  return (
+    <SideNavigationLayout>
+      <div>Leaderboard</div>
+    </SideNavigationLayout>
+  );
 };
 
 export default Leaderboard;

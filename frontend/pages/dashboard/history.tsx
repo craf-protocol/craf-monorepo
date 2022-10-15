@@ -1,5 +1,11 @@
+import { SideNavigationLayout } from "../../components/SideNavigationLayout";
+
 const History = () => {
-  return <div>History</div>;
+  return (
+    <SideNavigationLayout>
+      <div>History</div>
+    </SideNavigationLayout>
+  );
 };
 
 export default History;
