@@ -4,6 +4,7 @@ import { Bars3Icon, BellIcon, XMarkIcon, ArrowsPointingOutIcon } from '@heroicon
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from 'next/image'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', current: false },
@@ -37,7 +38,7 @@ export function NavigationBar() {
                   <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div className="flex flex-shrink-0 items-center">
                       <Link href='/'>
-                        <ArrowsPointingOutIcon className="cursor-pointer block h-8 w-auto text-white" />
+                        <Image className='cursor-pointer' src='/craf-logo.svg' height='30' width='120'/>
                       </Link>
                     </div>
                     <div className="hidden sm:ml-6 sm:block">
