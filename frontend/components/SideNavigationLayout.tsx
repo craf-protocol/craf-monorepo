@@ -44,16 +44,14 @@ export const SideNavigationLayout = ({ children }: any) => {
           <div className="flex flex-1 flex-col overflow-y-auto">
             <nav className="flex-1 space-y-1 px-2 py-4">
               {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classNames(
+                <Link key={item.name} href={item.href}>
+                  <p className={classNames(
                     pathname === item.href
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                  )}
-                >
+                      "cursor-pointer group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                    )}
+                  >
                   <item.icon
                     className={classNames(
                       pathname === item.href
@@ -64,7 +62,8 @@ export const SideNavigationLayout = ({ children }: any) => {
                     aria-hidden="true"
                   />
                   {item.name}
-                </a>
+                </p>
+                  </Link>
               ))}
             </nav>
           </div>

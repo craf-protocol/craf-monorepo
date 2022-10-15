@@ -37,26 +37,23 @@ export function NavigationBar() {
                   <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div className="flex flex-shrink-0 items-center">
                       <Link href='/'>
-                        <ArrowsPointingOutIcon className="cursor-pointer block h-8 w-auto lg:hidden text-white" />
-                      </Link>
-                      <Link href='/'>
-                        <ArrowsPointingOutIcon className="cursor-pointer block h-8 w-auto lg:block text-white" />
+                        <ArrowsPointingOutIcon className="cursor-pointer block h-8 w-auto text-white" />
                       </Link>
                     </div>
                     <div className="hidden sm:ml-6 sm:block">
                       <div className="flex space-x-4">
                         {navigation.map((item) => (
-                            <a
-                                key={item.name}
-                                href={item.href}
+                            <Link key={item.name} href={item.href}>
+                            <p
                                 className={classNames(
                                     (pathname === item.href) ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                    'px-3 py-2 rounded-md text-sm font-medium'
+                                    'cursor-pointer px-3 py-2 rounded-md text-sm font-medium'
                                 )}
                                 aria-current={(pathname === item.href) ? 'page' : undefined}
                             >
                               {item.name}
-                            </a>
+                            </p>
+                            </Link>
                         ))}
                       </div>
                     </div>
