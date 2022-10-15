@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline'
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', current: false },
@@ -54,6 +55,7 @@ export function NavigationBar() {
                       </div>
                     </div>
                   </div>
+                  <ConnectButton />
                 </div>
               </div>
 
