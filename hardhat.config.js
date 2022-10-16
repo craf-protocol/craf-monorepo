@@ -14,7 +14,7 @@ const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
-    version: "0.8.9",
+    version: "0.8.12",
     settings: {
       optimizer: {
         enabled: true,

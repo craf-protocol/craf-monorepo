@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+
 
 contract CRAFTreasury is ERC721, Ownable {
     uint256 private currentId;
@@ -84,7 +86,7 @@ contract CRAFTreasury is ERC721, Ownable {
         _requireMinted(tokenId);
 
         string memory baseURI = _baseURI();
-        return bytes(baseURI).length > 0 ? string.concat(string.concat(baseURI, tokenId.toString()), ".json") : "";
+        return string.concat(string.concat(baseURI, Strings.toString(tokenId)), ".json");
     }
 
     /// @dev Smart contract can receive ether like a regular user account controlled by a PK would.
