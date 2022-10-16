@@ -3,15 +3,20 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract CRAFTreasury is Ownable {
+contract CRAFTreasury is Ownable, ERC721 {
+
+    uint256 private currentId;
 
     /** Events **/
     event FundTreasury(address indexed token, address indexed from, uint256 amount, uint256 balance);
 
-    constructor(address governanceAddress) {
-      // Grant the governance timelock address as contract owner
-      Ownable(governanceAddress);
+    constructor(address governanceAddress, string memory name, string memory symbol) {
+        // Grant the governance timelock address as contract owner
+        currentId = 0;
+        Ownable(governanceAddress);
+        super(name, symbol);
     }
 
     /// @dev Checks balance of token in treasury
@@ -33,7 +38,9 @@ contract CRAFTreasury is Ownable {
         emit FundTreasury(token, msg.sender, amount, balance);
 
         // Mint NFT to msg sender for funding
-        // TODO: Mint
+
+        super._safeMint(msg.sender, currentId);
+        currentId += 1;
         return true;
     }
 
@@ -70,6 +77,10 @@ contract CRAFTreasury is Ownable {
                     transferred := 0
                 }
         }
+    }
+
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        return super.tokenURI(0);
     }
 
     /// @dev Smart contract can receive ether like a regular user account controlled by a PK would.

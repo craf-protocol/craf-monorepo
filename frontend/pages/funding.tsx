@@ -2,8 +2,14 @@ import contracts from "../utils/contracts/contract-address.json"
 import treasury from "../utils/contracts/CRAFTreasury.json"
 import token from '../utils/contracts/Token.json'
 import {useState} from "react";
-import {utils} from "ethers";
-import {useAccount, useContractWrite, usePrepareSendTransaction, useWaitForTransaction} from "wagmi";
+import {BigNumber, utils} from "ethers";
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  usePrepareSendTransaction,
+  useWaitForTransaction
+} from "wagmi";
 import toast, { Toaster } from 'react-hot-toast';
 
 function Funding() {
@@ -15,7 +21,7 @@ function Funding() {
     address: contracts.token,
     abi: token.abi,
     functionName: "increaseAllowance",
-    args: [address, Number(amount)],
+    args: [address, BigNumber.from(amount).shl(18)],
   })
 
   const fundWrite = useContractWrite({
@@ -23,24 +29,46 @@ function Funding() {
     address: contracts.treasury,
     abi: treasury.abi,
     functionName: "fundTreasury",
-    args: [contracts.token, Number(amount)],
+    args: [contracts.token, BigNumber.from(amount).shl(18)],
+    overrides: {
+      gasLimit: BigNumber.from(500000),
+    }
   });
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
+  const increaseAllowanceWait = useWaitForTransaction({
+    hash: increaseAllowanceWrite.data?.hash,
+    async onSuccess(data) {
+      try {
+        if (fundWrite.writeAsync) {
+          const running = toast.loading("Funding contract")
+          await fundWrite.writeAsync()
+          toast.dismiss(running)
+        }
+      } catch {
+        toast.dismiss()
+        toast.error("Transaction Failed")
+      }
+    },
+  });
+
+  const fundingWait = useWaitForTransaction({
     hash: fundWrite.data?.hash,
+    onSuccess(data) {
+      toast.success("Account was funded successfully")
+    }
   });
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    if (increaseAllowanceWrite.writeAsync) {
-      const running = toast.loading("Increasing Allowance")
-      await increaseAllowanceWrite.writeAsync()
-      toast.dismiss(running);
-    }
-    if (fundWrite.writeAsync) {
-      const running = toast.loading("Funding contract")
-      await fundWrite.writeAsync()
-      toast.dismiss(running)
+    try {
+      if (increaseAllowanceWrite.writeAsync) {
+        const running = toast.loading("Increasing Allowance")
+        await increaseAllowanceWrite.writeAsync()
+        toast.dismiss(running);
+      }
+    } catch {
+      toast.dismiss()
+      toast.error("Transaction Failed")
     }
   }
 
@@ -89,7 +117,7 @@ function Funding() {
                     disabled={!amount}
                     className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  {isLoading ? "...Submitting" : "Submit"}
+                  {(increaseAllowanceWait.isLoading || fundingWait.isLoading) ? "...Submitting" : "Submit"}
                 </button>
               </div>
             </div>
