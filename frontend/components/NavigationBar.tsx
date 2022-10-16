@@ -38,7 +38,9 @@ export function NavigationBar() {
                   <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div className="flex flex-shrink-0 items-center">
                       <Link href='/'>
-                        <Image className='cursor-pointer' src='/craf-logo.svg' height='30' width='120'/>
+                        <div>
+                          <Image className='cursor-pointer' src='/craf-logo.svg' height='30' width='120'/>
+                        </div>
                       </Link>
                     </div>
                     <div className="hidden sm:ml-6 sm:block">

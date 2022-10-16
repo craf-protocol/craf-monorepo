@@ -3,7 +3,7 @@ import {ProposalListItem} from "../../components/ProposalListItem";
 
 const proposals = [
     {
-        contractAddress: "0x3481975b3883a838f2992cd94",
+        contractAddress: "0x6FC94ba120E9AFeA1cC369f13721e995860cDf99",
         deployedDate: '2020-01-07',
         title: 'BattleFly v1',
         description: 'The BattleFly Founders NFTs represent ownership of the BattleFly Game.',
@@ -13,7 +13,7 @@ const proposals = [
         URL: 'https://trove.treasure.lol/collection/battlefly-v1-founders-nft',
     },
     {
-        contractAddress: "0x3481975b3883a838f2992cd94",
+        contractAddress: "0x83aAc1CE9979F85C899C83FB76fb0e94CF0AcEb5",
         deployedDate: '2020-01-07',
         title: 'Realm - Monuments',
         description: 'The Ancients left behind their legacy through Ancient Ruins and Artifacts. The Particle that floats in the air reminds us of their great work.\n' +
@@ -27,7 +27,7 @@ const proposals = [
         URL: 'https://trove.treasure.lol/collection/realm-monuments',
     },
     {
-        contractAddress: "0x3481975b3883a838f2992cd94",
+        contractAddress: "0x4A87dbdE7481091135442518fFa81676ab806790",
         deployedDate: '2020-01-07',
         title: 'Smol Brains',
         description: 'The Smol Brains are a dynamic PFP of a monkey whose head gets bigger the larger its IQ becomes.',
