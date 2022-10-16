@@ -23,8 +23,14 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const CRAFTreasury = await ethers.getContractFactory("CRAFTreasury");
-  const governanceAddress = "0xaDbDafC36B381f820b220255F81319Bc6910749D";
-  const treasury = await CRAFTreasury.deploy(governanceAddress);
+  const governanceAddress = "0xFce8932ccD3c50f0Ea0F5dD246002916eF4Fc6d4";
+  const nftName = "CRAFT Collective";
+  const nftSymbol = "CRAFT";
+  const treasury = await CRAFTreasury.deploy(
+    governanceAddress,
+    nftName,
+    nftSymbol
+  );
   await treasury.deployed();
 
   console.log("Treasury address:", treasury.address);

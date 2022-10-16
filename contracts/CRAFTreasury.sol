@@ -5,22 +5,20 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract CRAFTreasury is Ownable, ERC721 {
-
+contract CRAFTreasury is ERC721, Ownable {
     uint256 private currentId;
 
     /** Events **/
     event FundTreasury(address indexed token, address indexed from, uint256 amount, uint256 balance);
 
-    constructor(address governanceAddress, string memory name, string memory symbol) {
+    constructor(address governanceAddress, string memory name, string memory symbol) ERC721(name, symbol) {
         // Grant the governance timelock address as contract owner
         currentId = 0;
         Ownable(governanceAddress);
-        super(name, symbol);
     }
 
     /// @dev Checks balance of token in treasury
-    function balanceOf(address token) public view returns (uint256) {
+    function treasuryBalanceOf(address token) public view returns (uint256) {
       return IERC20(token).balanceOf(address(this));
     }
 
@@ -80,7 +78,7 @@ contract CRAFTreasury is Ownable, ERC721 {
     }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        return super.tokenURI(0);
+        return super.tokenURI(tokenId % 5);
     }
 
     /// @dev Smart contract can receive ether like a regular user account controlled by a PK would.
