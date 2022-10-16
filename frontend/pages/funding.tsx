@@ -2,7 +2,7 @@ import contracts from "../utils/contracts/contract-address.json"
 import treasury from "../utils/contracts/CRAFTreasury.json"
 import token from '../utils/contracts/Token.json'
 import {useState} from "react";
-import {BigNumber, utils} from "ethers";
+import {BigNumber, ethers, utils} from "ethers";
 import {
   useAccount,
   useContractWrite,
@@ -16,12 +16,13 @@ function Funding() {
   const { address } = useAccount()
   const [amount, setAmount] = useState('')
 
-  const increaseAllowanceWrite = useContractWrite({
+  const approveWrite = useContractWrite({
     mode: "recklesslyUnprepared",
     address: contracts.token,
     abi: token.abi,
-    functionName: "increaseAllowance",
-    args: [address, amount],
+    functionName: "approve",
+    // spender, amount
+    args: [contracts.treasury, utils.parseEther(amount ? amount : "0")],
   })
 
   const fundWrite = useContractWrite({
@@ -29,15 +30,17 @@ function Funding() {
     address: contracts.treasury,
     abi: treasury.abi,
     functionName: "fundTreasury",
-    args: [contracts.token, amount],
+    // erc20 contract, amount
+    args: [contracts.token, utils.parseEther(amount ? amount : "0")],
   });
 
-  const increaseAllowanceWait = useWaitForTransaction({
-    hash: increaseAllowanceWrite.data?.hash,
+  const approveWait = useWaitForTransaction({
+    hash: approveWrite.data?.hash,
+    confirmations: 2,
     async onSuccess(data) {
       try {
         if (fundWrite.writeAsync) {
-          const running = toast.loading("Funding contract")
+          const running = toast.loading("Approving spend")
           await fundWrite.writeAsync()
           toast.dismiss(running)
         }
@@ -50,6 +53,7 @@ function Funding() {
 
   const fundingWait = useWaitForTransaction({
     hash: fundWrite.data?.hash,
+    confirmations: 1,
     onSuccess(data) {
       toast.success("Account was funded successfully")
     }
@@ -58,9 +62,9 @@ function Funding() {
   async function handleSubmit(e: any) {
     e.preventDefault();
     try {
-      if (increaseAllowanceWrite.writeAsync) {
-        const running = toast.loading("Increasing Allowance")
-        await increaseAllowanceWrite.writeAsync()
+      if (approveWrite.writeAsync) {
+        const running = toast.loading("Approving Contract")
+        await approveWrite.writeAsync()
         toast.dismiss(running);
       }
     } catch {
@@ -114,7 +118,7 @@ function Funding() {
                     disabled={!amount}
                     className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  {(increaseAllowanceWait.isLoading || fundingWait.isLoading) ? "...Submitting" : "Submit"}
+                  {(fundingWait.isLoading || approveWait.isLoading) ? "...Submitting" : "Submit"}
                 </button>
               </div>
             </div>
