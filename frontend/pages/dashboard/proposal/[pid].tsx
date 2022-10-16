@@ -42,8 +42,7 @@ function InfoCard() {
                     <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                         <dt className="text-sm font-medium text-gray-500">URL</dt>
                         <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            <a href={proposal.URL} target="_blank" className="no-underline hover:underline">{proposal.URL}</a>
-
+                            <a href={proposal.URL} target="_blank" rel="noreferrer" className="no-underline hover:underline">{proposal.URL}</a>
                         </dd>
                     </div>
                 </dl>
