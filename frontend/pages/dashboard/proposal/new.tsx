@@ -1,13 +1,40 @@
 import { SideNavigationLayout } from "../../../components/SideNavigationLayout";
-
-function createNewProposal(e: any) {
-    e.preventDefault();
-
-}
+import contracts from "../../../utils/contracts/contract-address.json"
+import governor from "../../../utils/contracts/CRAFGovernor.json"
+import {useContract, useContractWrite, usePrepareContractWrite, useProvider} from "wagmi";
 
 function NewProposalForm() {
+    const provider = useProvider()
+    // const contract = useContract({
+    //     contractInterface: undefined,
+    //     signerOrProvider: provider,
+    //     addressOrName: contracts.governance,
+    //     abi: governor.abi
+    // })
+    const foo = usePrepareContractWrite({
+        addressOrName: contracts.governance,
+        abi: governor.abi,
+        functionName: 'propose'
+    })
+    const { write } = useContractWrite(foo.config)
+
+    function createNewProposal(e: any) {
+        e.preventDefault();
+        const payload = {
+            title: e.target.title.value,
+            description: e.target.description.value,
+            url: e.target.url.value,
+            recipient: e.target.recipient.value,
+            amount: e.target.amount.value,
+        }
+        const jsonStringPayload = JSON.stringify(payload);
+        const values = [e.target.amount.value]
+        const targets = [e.target.recipient.value]
+
+    }
+
     return (
-        <div className="space-y-6">
+        <form className="space-y-6" onSubmit={createNewProposal}>
             <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
                 <div className="md:grid md:grid-cols-3 md:gap-6">
                     <div className="md:col-span-1">
@@ -92,13 +119,13 @@ function NewProposalForm() {
             </div>
             <div className="flex justify-end">
                 <button
-                    onClick={createNewProposal}
+                    type='submit'
                     className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                     Submit
                 </button>
             </div>
-        </div>
+        </form>
     )
 }
 
