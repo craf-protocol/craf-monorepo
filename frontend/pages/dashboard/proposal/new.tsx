@@ -1,8 +1,10 @@
 import { SideNavigationLayout } from "../../../components/SideNavigationLayout";
 import contracts from "../../../utils/contracts/contract-address.json";
 import governor from "../../../utils/contracts/CRAFGovernor.json";
+import treasury from "../../../utils/contracts/CRAFTreasury.json";
 import { useContractWrite, useWaitForTransaction } from "wagmi";
 import { useState } from "react";
+import { ethers } from "ethers";
 
 function NewProposalForm() {
   const [args, setArgs] = useState<any[]>();
@@ -28,16 +30,22 @@ function NewProposalForm() {
       recipient: e.target.recipient.value,
       amount: e.target.amount.value,
     };
+
+    // Construct calldata for the proposal
+    const iTreasury = new ethers.utils.Interface(treasury.abi);
+    const calldata = iTreasury.encodeFunctionData("transferToken", [
+      contracts.token, // NOTE: Assuming same governance token + treasury token
+      e.target.recipient.value,
+      e.target.amount.value,
+    ]);
+
+    // Construct arguments being sent to governance propose fn
     const args = [
-      [e.target.recipient.value], // targets
+      [contracts.treasury], // targets
       [Number(e.target.amount.value)], // values
-      [""], // calldatas
+      [calldata], // calldatas
       JSON.stringify(payload), // description
     ];
-    console.log(
-      "🚀 ~ file: new.tsx ~ line 32 ~ createNewProposal ~ args",
-      args
-    );
 
     setArgs(args);
     if (write) {
