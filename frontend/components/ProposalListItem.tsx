@@ -1,7 +1,7 @@
 import {CheckCircleIcon, ChevronRightIcon, EnvelopeIcon} from "@heroicons/react/20/solid";
 import Link from "next/link";
 
-interface ProposalListItemProps {
+export interface ProposalListItemProps {
     contractAddress: string,
     title: string,
     description: string,
