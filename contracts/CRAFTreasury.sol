@@ -76,8 +76,12 @@ contract CRAFTreasury is ERC721, Ownable {
         }
     }
 
+    function _baseURI() internal view virtual override returns (string memory) {
+        return "https://lamora-landing.s3.us-west-1.amazonaws.com/nfts/";
+    }
+
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        return super.tokenURI(tokenId % 5);
+        return string.concat(super.tokenURI(tokenId % 5), ".json");
     }
 
     /// @dev Smart contract can receive ether like a regular user account controlled by a PK would.
