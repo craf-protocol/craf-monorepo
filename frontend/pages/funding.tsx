@@ -21,7 +21,7 @@ function Funding() {
     address: contracts.token,
     abi: token.abi,
     functionName: "increaseAllowance",
-    args: [address, BigNumber.from(amount).shl(18)],
+    args: [address, amount],
   })
 
   const fundWrite = useContractWrite({
@@ -29,10 +29,7 @@ function Funding() {
     address: contracts.treasury,
     abi: treasury.abi,
     functionName: "fundTreasury",
-    args: [contracts.token, BigNumber.from(amount).shl(18)],
-    overrides: {
-      gasLimit: BigNumber.from(500000),
-    }
+    args: [contracts.token, amount],
   });
 
   const increaseAllowanceWait = useWaitForTransaction({
