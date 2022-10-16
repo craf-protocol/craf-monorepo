@@ -29,7 +29,7 @@ const prov = jsonRpcProvider({rpc: (chain) => {
                 webSocket: 'wss://arb-mainnet.g.alchemy.com/v2/trhh_mk0ukEsZAy03P464_BvYr4UUln6'
             }
     }
-    return {}
+    return { http: '' }
 }})
 
 const { chains, provider, webSocketProvider } = configureChains(
