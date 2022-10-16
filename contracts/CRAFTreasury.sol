@@ -31,14 +31,13 @@ contract CRAFTreasury is ERC721, Ownable {
     ) public returns (bool) {
         // Transfer tokens from fn caller to treasury & get new token balance
         IERC20(token).transferFrom(msg.sender, address(this), amount);
-        uint256 balance = IERC20(token).balanceOf(address(this));
+        // uint256 balance = IERC20(token).balanceOf(address(this));
 
-        emit FundTreasury(token, msg.sender, amount, balance);
+        // emit FundTreasury(token, msg.sender, amount, balance);
 
         // Mint NFT to msg sender for funding
-
-        super._safeMint(msg.sender, currentId);
-        currentId += 1;
+        // super._safeMint(msg.sender, currentId);
+        // currentId += 1;
         return true;
     }
 
