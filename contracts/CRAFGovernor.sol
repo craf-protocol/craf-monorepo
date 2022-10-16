@@ -15,6 +15,8 @@ contract CRAFGovernor is
     GovernorVotes,
     GovernorVotesQuorumFraction {
 
+    mapping(uint256 => string) public descriptions;
+
     constructor(IVotes _token)
         Governor("CRAFGovernor")
         GovernorSettings(1 /* 1 block */, 50400 /* 1 week */, 0 /* 0 token threshold */)
@@ -22,14 +24,14 @@ contract CRAFGovernor is
         GovernorVotesQuorumFraction(4)
     {}
 
-    mapping(uint256 => string) public descriptions;
-
-    // The following functions are overrides required by Solidity.
-
-    function getDescription(uint256 id) public view returns(string memory) {
-        return descriptions[id];
+    /// @dev Retrieves proposal description from state
+    function getDescription(uint256 proposalId) public view returns(string memory) {
+        return descriptions[proposalId];
     }
 
+
+
+    // The following functions are overrides required by Solidity.
     function votingDelay()
         public
         view
