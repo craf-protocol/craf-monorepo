@@ -19,7 +19,7 @@ function NewProposalForm() {
         address: contracts.governance,
         abi: governor.abi,
         functionName: 'propose',
-        args: [args]
+        args: args
     })
 
     const { isLoading, isSuccess } = useWaitForTransaction({
@@ -68,13 +68,13 @@ function NewProposalForm() {
                             />
                         </div>
                         <div>
-                            <label htmlFor="about" className="block text-sm font-medium text-gray-700">
+                            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                                 Description
                             </label>
                             <div className="mt-1">
                 <textarea
-                    id="about"
-                    name="about"
+                    id="description"
+                    name="description"
                     rows={3}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder="you@example.com"
@@ -85,7 +85,7 @@ function NewProposalForm() {
                         </div>
                         <div className="grid grid-cols-3 gap-6">
                             <div className="col-span-3 sm:col-span-2">
-                                <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="url" className="block text-sm font-medium text-gray-700">
                                     URL
                                 </label>
                                 <div className="mt-1 flex rounded-md shadow-sm">
@@ -94,8 +94,8 @@ function NewProposalForm() {
                   </span>
                                     <input
                                         type="text"
-                                        name="company-website"
-                                        id="company-website"
+                                        name="url"
+                                        id="url"
                                         className="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                         placeholder="www.example.com"
                                     />
