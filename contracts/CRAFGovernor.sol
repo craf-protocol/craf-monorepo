@@ -22,7 +22,13 @@ contract CRAFGovernor is
         GovernorVotesQuorumFraction(4)
     {}
 
+    mapping(uint256 => string) public descriptions;
+
     // The following functions are overrides required by Solidity.
+
+    function getDescription(uint256 id) public view returns(string memory) {
+        return descriptions[id];
+    }
 
     function votingDelay()
         public
@@ -65,7 +71,9 @@ contract CRAFGovernor is
         override(Governor)
         returns (uint256)
     {
-        return super.propose(targets, values, calldatas, description);
+        uint256 proposalId = super.propose(targets, values, calldatas, description);
+        descriptions[proposalId] = description;
+        return proposalId;
     }
 
     function proposalThreshold()
