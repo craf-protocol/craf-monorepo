@@ -1,24 +1,31 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract CRAFTreasury is AccessControl {
-    // Create a new role identifier for the governor timelock role
-    bytes32 public constant GOV_TIMELOCK_ROLE = keccak256("GOV_TIMELOCK_ROLE");
+contract CRAFTreasury is Ownable {
+
+    /** Events **/
+    event FundTreasury(address indexed token, address indexed from, uint256 amount, uint256 balance);
 
     constructor(address govTimelockAddress) {
-      // Grant the governance timelock role to a specified address
-      _setupRole(GOV_TIMELOCK_ROLE, govTimelockAddress);
+      // Grant the governance timelock address as contract owner
+      Ownable(govTimelockAddress);
     }
 
+    /// @dev Funds treasury and returns if it was a success
+    /// @param token Token that should be transferred
+    /// @param amount The amount of tokens that should be transferred
     function fundTreasury(
       address token,
       uint256 amount
     ) public returns (bool) {
-        // Transfer token to treasury
+        // Transfer tokens from fn caller to treasury & get new token balance
         IERC20(token).transferFrom(msg.sender, address(this), amount);
+        uint256 balance = IERC20(token).balanceOf(address(this));
+
+        emit FundTreasury(token, msg.sender, amount, balance);
 
         // Mint NFT to msg sender for funding
         // TODO: Mint
@@ -33,8 +40,7 @@ contract CRAFTreasury is AccessControl {
         address token,
         address receiver,
         uint256 amount
-    ) public returns (bool transferred) {
-        require(hasRole(GOV_TIMELOCK_ROLE, msg.sender), "Caller is not the governance timelock");
+    ) public onlyOwner returns (bool transferred) {
 
         // Poor mans
         IERC20(token).transferFrom(address(this), receiver, amount);
@@ -60,13 +66,10 @@ contract CRAFTreasury is AccessControl {
         }
     }
 
+    /// @dev Smart contract can receive ether like a regular user account controlled by a PK would.
+    /// @notice Built-in function doesn't require any calldata, it will get called if the data field is empty and the value field is not empty.
     receive() external payable {
-      // this built-in function doesn't require any calldata,
-      // it will get called if the data field is empty and
-      // the value field is not empty.
-      // this allows the smart contract to receive ether just like a
-      // regular user account controlled by a private key would.
-      revert();
-      // The treasury only handles ERC20/ERC721 tokens and not native ETH
+        // The treasury only handles ERC20/ERC721 tokens and not native ETH
+        revert();
     }
 }

@@ -8,23 +8,18 @@ import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 
-contract CRAF is Governor, GovernorSettings, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
-    struct ProposalMetadata {
-        string title;
-        string imgUrl;
-        string projectUrl;
-        uint256 amount;
-        address[] target;
-    }
+contract CRAFGovernor is
+    Governor,
+    GovernorSettings,
+    GovernorCountingSimple,
+    GovernorVotes,
+    GovernorVotesQuorumFraction {
 
-    mapping(uint256 => ProposalMetadata) private _proposalsMetadata;
-
-    constructor(IVotes _token, TimelockController _timelock)
+    constructor(IVotes _token)
         Governor("CRAFGovernor")
         GovernorSettings(1 /* 1 block */, 50400 /* 1 week */, 0 /* 0 token threshold */)
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(4)
-        GovernorTimelockControl(_timelock)
     {}
 
     // The following functions are overrides required by Solidity.
@@ -59,7 +54,7 @@ contract CRAF is Governor, GovernorSettings, GovernorCountingSimple, GovernorVot
     function state(uint256 proposalId)
         public
         view
-        override(Governor, GovernorTimelockControl)
+        override(Governor)
         returns (ProposalState)
     {
         return super.state(proposalId);
@@ -67,20 +62,10 @@ contract CRAF is Governor, GovernorSettings, GovernorCountingSimple, GovernorVot
 
     function propose(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description)
         public
-        override(Governor, IGovernor)
+        override(Governor)
         returns (uint256)
     {
-        uint256 proposalId = super.propose(targets, values, calldatas, description);
-
-        _proposalsMetadata[proposalId] = ProposalMetadata({
-            title: "",
-            imgUrl: "",
-            projectUrl: "",
-            amount: 0,
-            target: targets
-        });
-
-        return proposalId;
+        return super.propose(targets, values, calldatas, description);
     }
 
     function proposalThreshold()
@@ -94,14 +79,14 @@ contract CRAF is Governor, GovernorSettings, GovernorCountingSimple, GovernorVot
 
     function _execute(uint256 proposalId, address[] memory targets, uint256[] memory values, bytes[] memory calldatas, bytes32 descriptionHash)
         internal
-        override(Governor, GovernorTimelockControl)
+        override(Governor)
     {
         super._execute(proposalId, targets, values, calldatas, descriptionHash);
     }
 
     function _cancel(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, bytes32 descriptionHash)
         internal
-        override(Governor, GovernorTimelockControl)
+        override(Governor)
         returns (uint256)
     {
         return super._cancel(targets, values, calldatas, descriptionHash);
@@ -110,7 +95,7 @@ contract CRAF is Governor, GovernorSettings, GovernorCountingSimple, GovernorVot
     function _executor()
         internal
         view
-        override(Governor, GovernorTimelockControl)
+        override(Governor)
         returns (address)
     {
         return super._executor();
@@ -119,7 +104,7 @@ contract CRAF is Governor, GovernorSettings, GovernorCountingSimple, GovernorVot
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(Governor, GovernorTimelockControl)
+        override(Governor)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
