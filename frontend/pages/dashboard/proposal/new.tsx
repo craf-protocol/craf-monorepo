@@ -1,22 +1,30 @@
 import { SideNavigationLayout } from "../../../components/SideNavigationLayout";
 import contracts from "../../../utils/contracts/contract-address.json"
 import governor from "../../../utils/contracts/CRAFGovernor.json"
-import {useContract, useContractWrite, usePrepareContractWrite, useProvider} from "wagmi";
+import {
+    useContract,
+    useContractWrite,
+    usePrepareContractWrite,
+    useProvider,
+    useSendTransaction,
+    useWaitForTransaction
+} from "wagmi";
+import {useState} from "react";
 
 function NewProposalForm() {
-    const provider = useProvider()
-    // const contract = useContract({
-    //     contractInterface: undefined,
-    //     signerOrProvider: provider,
-    //     addressOrName: contracts.governance,
-    //     abi: governor.abi
-    // })
-    const foo = usePrepareContractWrite({
-        addressOrName: contracts.governance,
+    const [args, setArgs] = useState<any[]>();
+
+    const { data, write } = useContractWrite({
+        mode: "recklesslyUnprepared",
+        address: contracts.governance,
         abi: governor.abi,
-        functionName: 'propose'
+        functionName: 'propose',
+        args: [args]
     })
-    const { write } = useContractWrite(foo.config)
+
+    const { isLoading, isSuccess } = useWaitForTransaction({
+        hash: data?.hash,
+    })
 
     function createNewProposal(e: any) {
         e.preventDefault();
@@ -27,10 +35,11 @@ function NewProposalForm() {
             recipient: e.target.recipient.value,
             amount: e.target.amount.value,
         }
-        const jsonStringPayload = JSON.stringify(payload);
-        const values = [e.target.amount.value]
         const targets = [e.target.recipient.value]
-
+        const values = [e.target.amount.value]
+        const calldata = undefined
+        const jsonStringPayload = JSON.stringify(payload);
+        setArgs([targets, values, calldata, jsonStringPayload]);
     }
 
     return (
