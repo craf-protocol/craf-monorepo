@@ -30,7 +30,7 @@ contract CRAFTreasury is ERC721, Ownable {
       uint256 amount
     ) public returns (bool) {
         // Transfer tokens from fn caller to treasury & get new token balance
-        IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
+        IERC20(token).transferFrom(msg.sender, address(this), amount);
         // uint256 balance = IERC20(token).balanceOf(address(this));
 
         // emit FundTreasury(token, msg.sender, amount, balance);
