@@ -9,9 +9,14 @@ contract CRAFTreasury is Ownable {
     /** Events **/
     event FundTreasury(address indexed token, address indexed from, uint256 amount, uint256 balance);
 
-    constructor(address govTimelockAddress) {
+    constructor(address governanceAddress) {
       // Grant the governance timelock address as contract owner
-      Ownable(govTimelockAddress);
+      Ownable(governanceAddress);
+    }
+
+    /// @dev Checks balance of token in treasury
+    function balanceOf(address token) public view returns (uint256) {
+      return IERC20(token).balanceOf(address(this));
     }
 
     /// @dev Funds treasury and returns if it was a success
@@ -40,10 +45,11 @@ contract CRAFTreasury is Ownable {
         address token,
         address receiver,
         uint256 amount
-    ) public onlyOwner returns (bool transferred) {
+    ) public returns (bool transferred) {
+        // TODO: Add onlyOwner
 
         // Poor mans
-        IERC20(token).transferFrom(address(this), receiver, amount);
+        // IERC20(token).transferFrom(address(this), receiver, amount);
 
         // t11s
         // 0xa9059cbb - keccack("transfer(address,uint256)")

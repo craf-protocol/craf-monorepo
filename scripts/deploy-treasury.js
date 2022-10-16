@@ -22,18 +22,18 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const CRAFGovernance = await ethers.getContractFactory("CRAFGovernor");
-  const tokenAddress = "0xf526E41B93450216ff7b49eC5583de8e6EE4B394";
-  const gov = await CRAFGovernance.deploy(tokenAddress);
-  await gov.deployed();
+  const CRAFTreasury = await ethers.getContractFactory("CRAFTreasury");
+  const governanceAddress = "0xaDbDafC36B381f820b220255F81319Bc6910749D";
+  const treasury = await CRAFTreasury.deploy(governanceAddress);
+  await treasury.deployed();
 
-  console.log("Governance address:", gov.address);
+  console.log("Treasury address:", treasury.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(gov);
+  saveFrontendFiles(treasury);
 }
 
-function saveFrontendFiles(gov) {
+function saveFrontendFiles(treasury) {
   const fs = require("fs");
   const contractsDir = path.join(
     __dirname,
@@ -56,7 +56,7 @@ function saveFrontendFiles(gov) {
     fs.writeFileSync(
       contractAddressFilepath,
       JSON.stringify(
-        { ...JSON.parse(contractAddress), governance: gov.address },
+        { ...JSON.parse(contractAddress), treasury: treasury.address },
         undefined,
         2
       )
@@ -64,15 +64,15 @@ function saveFrontendFiles(gov) {
   } else {
     fs.writeFileSync(
       path.join(contractsDir, "contract-address.json"),
-      JSON.stringify({ governance: gov.address }, undefined, 2)
+      JSON.stringify({ treasury: treasury.address }, undefined, 2)
     );
   }
 
-  const CRAFGovernorArtifact = artifacts.readArtifactSync("CRAFGovernor");
+  const CRAFTreasuryArtifact = artifacts.readArtifactSync("CRAFTreasury");
 
   fs.writeFileSync(
-    path.join(contractsDir, "CRAFGovernor.json"),
-    JSON.stringify(CRAFGovernorArtifact, null, 2)
+    path.join(contractsDir, "CRAFTreasury.json"),
+    JSON.stringify(CRAFTreasuryArtifact, null, 2)
   );
 }
 
