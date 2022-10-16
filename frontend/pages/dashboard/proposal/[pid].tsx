@@ -1,58 +1,78 @@
-import { useMemo } from "react";
+import {useMemo, useState} from "react";
 import { useRouter } from "next/router";
-import { useContractRead } from "wagmi";
+import {useContractRead, useContractWrite} from "wagmi";
 import { SideNavigationLayout } from "../../../components/SideNavigationLayout";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import contracts from "../../../utils/contracts/contract-address.json";
 import governor from "../../../utils/contracts/CRAFGovernor.json";
+import token from "../../../utils/contracts/Token.json";
+import {utils} from "ethers";
+import {keccak256} from "ethers/lib/utils";
 
 const govContract = {
   address: contracts.governance,
   abi: governor.abi,
 };
 
-function approve(e: any) {
-  e.preventDefault();
-  console.log("Approve");
-}
 
-function abstain(e: any) {
-  e.preventDefault();
-  console.log("Abstain");
-}
 
-function reject(e: any) {
-  e.preventDefault();
-  console.log("Reject");
-}
+const Proposal = () => {
 
-function ButtonRow() {
-  return (
-    <span className="isolate inline-flex rounded-md shadow-sm">
+    async function approve(e: any) {
+        e.preventDefault();
+        setVote(1);
+        console.log("Approve");
+        if (castVote.writeAsync) {
+            await castVote.writeAsync()
+        }
+    }
+
+    async function abstain(e: any) {
+        e.preventDefault();
+        setVote(2);
+        console.log("Abstain");
+        if (castVote.writeAsync) {
+            await castVote.writeAsync()
+        }
+    }
+
+    async function reject(e: any) {
+        e.preventDefault();
+        setVote(0);
+        console.log("Reject");
+        if (castVote.writeAsync) {
+            await castVote.writeAsync()
+        }
+    }
+
+    function ButtonRow() {
+        return (
+            <span className="isolate inline-flex rounded-md shadow-sm">
       <button
-        onClick={approve}
-        className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          onClick={approve}
+          className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
       >
         Approve
       </button>
       <button
-        onClick={abstain}
-        className="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          onClick={abstain}
+          className="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
       >
         Abstain
       </button>
       <button
-        onClick={reject}
-        className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          onClick={reject}
+          className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
       >
         Reject
       </button>
     </span>
-  );
-}
+        );
+    }
 
-const Proposal = () => {
-  const {
+    const [vote, setVote] = useState(0)
+
+    const {
     query: { pid },
   } = useRouter();
 
@@ -72,7 +92,19 @@ const Proposal = () => {
   } = useContractRead(config);
   const proposal = proposalDescription ? JSON.parse(proposalDescription) : null;
 
-  return (
+    let utf8Encode = new TextEncoder();
+    let bytes = utf8Encode.encode(proposalDescription);
+    const keccakProposalId = keccak256(bytes);
+
+    const castVote = useContractWrite({
+        mode: "recklesslyUnprepared",
+        address: contracts.governance,
+        abi: governor.abi,
+        functionName: "castVote",
+        args: [keccakProposalId, vote],
+    })
+
+    return (
     <SideNavigationLayout>
       <main className="flex-1">
         <div className="py-6">
