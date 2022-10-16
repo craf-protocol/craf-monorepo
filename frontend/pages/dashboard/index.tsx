@@ -70,16 +70,12 @@ const Dashboard = () => {
             <div className="overflow-hidden bg-white shadow sm:rounded-md">
               {proposalDescriptionCount > 0 ? (
                 <ul role="list" className="divide-y divide-gray-200">
-                  {proposalDescriptionsJSONs.map((p) => {
+                  {proposalDescriptionsJSONs.map((p, i) => {
                     const proposal = JSON.parse(p);
-                    console.log(
-                      "🚀 ~ file: index.tsx ~ line 118 ~ {proposalDescriptionsJSONs.map ~ proposal",
-                      proposal
-                    );
                     return (
                       <ProposalListItem
                         key={proposal.contractAddress}
-                        contractAddress={proposal.contractAddress}
+                        index={i}
                         title={proposal.title}
                         description={proposal.description}
                         amount={proposal.amount}
