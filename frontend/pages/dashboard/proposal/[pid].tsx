@@ -12,6 +12,37 @@ const proposal = {
     URL: 'https://trove.treasure.lol/collection/battlefly-v1-founders-nft',
 }
 
+function approve(e: any) {
+    e.preventDefault();
+    console.log("Approve");
+}
+
+function abstain(e: any) {
+    e.preventDefault();
+    console.log("Abstain");
+}
+
+function reject(e: any) {
+    e.preventDefault();
+    console.log("Reject");
+}
+
+function ButtonRow() {
+    return (
+        <span className="isolate inline-flex rounded-md shadow-sm">
+            <button onClick={approve} className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                Approve
+            </button>
+            <button onClick={abstain} className="relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                Abstain
+            </button>
+            <button onClick={reject} className="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                Reject
+            </button>
+        </span>
+    )
+}
+
 function InfoCard() {
     return (
         <div className="overflow-hidden bg-white shadow sm:rounded-lg">
@@ -44,6 +75,10 @@ function InfoCard() {
                         <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                             <a href={proposal.URL} target="_blank" rel="noreferrer" className="no-underline hover:underline">{proposal.URL}</a>
                         </dd>
+                    </div>
+                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                        <p className="py-4 text-lg font-medium leading-6 text-gray-900">Vote for this proposal</p>
+                        <ButtonRow />
                     </div>
                 </dl>
             </div>

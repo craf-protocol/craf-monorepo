@@ -1,17 +1,7 @@
-/*
-  This example requires some changes to your config:
+import contracts from "../utils/contracts/contract-address.json"
+import abi from "../utils/contracts/CRAFGovernor.json"
 
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+
 function Funding() {
 
   function handleSubmit(e: any) {
