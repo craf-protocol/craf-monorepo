@@ -33,7 +33,7 @@ async function main() {
   saveFrontendFiles(gov);
 }
 
-function saveFrontendFiles(token) {
+function saveFrontendFiles(gov) {
   const fs = require("fs");
   const contractsDir = path.join(
     __dirname,
