@@ -5,10 +5,10 @@ The contracts we built and their descriptions are as follows:
 This is our voting and payment token.
 
 
-CRAFGovernor.sol
+<h2>CRAFGovernor.sol</h2>
 This contract manages all of the proposals.
 
 
 
-CRAFTreasury.sol
+<h2>CRAFTreasury.sol</h2>
 This contract manages the treasury.
